@@ -1,0 +1,29 @@
+Ajout des règles au sécurity groups:
+
+Front:
+aws ec2 authorize-security-group-ingress --group-id sg-4d07407e --protocol tcp --port 80 --cidr 0.0.0.0/0 --endpoint https://fcu.eu-west-2.outscale.com
+aws ec2 authorize-security-group-ingress --group-id sg-4d07407e --protocol tcp --port 22 --cidr 0.0.0.0/0 --endpoint https://fcu.eu-west-2.outscale.com
+
+
+
+Creation d'un LBU AZ1 relié à internet:
+
+aws elb create-load-balancer --load-balancer-name front-load-balancer1b --listeners Protocol=TCP,LoadBalancerPort=80,InstanceProtocol=TCP,InstancePort=80 --subnets subnet-a5f9d84f --security-groups sg-f3c6daa0 --endpoint https://lbu.eu-west-2.outscale.com
+
+Enregistrement des VM du front au load banlancer 1
+
+aws elb register-instances-with-load-balancer --load-balancer-name front-load-balancer1b --instances i-4795687e --endpoint https://lbu.eu-west-2.outscale.com
+
+aws elb register-instances-with-load-balancer --load-balancer-name front-load-balancer1b --instances i-84119e2a --endpoint https://lbu.eu-west-2.outscale.com
+
+
+Creation d'un LBU AZ2 relié à internet:
+
+aws elb create-load-balancer --load-balancer-name front-load-balancer2a --listeners Protocol=TCP,LoadBalancerPort=80,InstanceProtocol=TCP,InstancePort=80 --subnets subnet-5b51f1c7 --security-groups sg-f3c6daa0 --endpoint https://lbu.eu-west-2.outscale.com
+
+Enregistrement des VM du front au load balancer 2:
+
+aws elb register-instances-with-load-balancer --load-balancer-name front-load-balancer2a --instances i-4795687e --endpoint https://lbu.eu-west-2.outscale.com
+
+aws elb register-instances-with-load-balancer --load-balancer-name front-load-balancer2a --instances i-84119e2a --endpoint https://lbu.eu-west-2.outscale.com
+
